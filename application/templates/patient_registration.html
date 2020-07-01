@@ -1,0 +1,38 @@
+{% extends "home.html" %}
+
+{% block forms %}
+
+	<h2 class="text-center">Patient Registration</h2>
+	<div class="row">
+        <div class="col-md-6 offset-md-3">
+            <h3></h3>
+            <form name="patient_registration" action="" method="post">
+                <label for="ssnid"><b>Patient SSNID</b></label>
+                <input type="text" placeholder="Enter Patient SSNID" name="patientSSNID" required>
+                <br>
+                <label for="name"><b>Patient Name</b></label>
+                <input type="text" placeholder="Enter Name" name="patientName" required>
+                <br>
+                <label for="age"><b>Patient Age</b></label>
+                <input type="number" placeholder="Enter Patient Age" name="patientAge" required>
+                <br>
+                <label for="doa"><b>Date Of Admission</b></label>
+                <input type="date" placeholder="Date Of Admission" name="doa" required>
+                <br>
+                <label for="toa"><b>Type Of Bed</b></label>
+                <input type="text" placeholder="EType Of Bed" name="tob" required>
+                <br>
+                <label for="address"><b>Address</b></label>
+                <input type="text" placeholder="Address" name="address" required>
+                <br>
+                <label for="state"><b>State</b></label>
+                <input type="text" placeholder="State" name="state" required>
+                <br>
+                <label for="city"><b>City</b></label>
+                <input type="text" placeholder="City" name="city" required>
+                <br class="clear">
+                <input class="btn-submit" type="submit" name="submit" value="submit">
+            </form>
+        </div>
+    </div>
+{% endblock %}
