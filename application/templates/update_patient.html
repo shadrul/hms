@@ -1,0 +1,71 @@
+{% extends "home.html" %}
+
+{% block forms %}
+
+	<h2 class="text-center">Update Patient</h2>
+    <p>{{data}}</p>
+	<div class="row">
+        <div class="col-md-6 offset-md-3">
+            <h3></h3>
+            <form name="get_patient" action="" method="get">
+                <fieldset class="form-group">
+                    <legend>{{title}}</legend> 
+                    <!-- {{ form.hidden_tag() }} -->
+
+                    <p>
+                        {{ formx.patientID.label }}<br>
+                        {{ formx.patientID(size=35) }}
+                        {% for error in formx.patientID.errors %}
+                            <span class="error-message">{{ error }}</span>
+                        {% endfor %}
+                    </p>
+                    <p>
+                        {{ formx.go() }}
+                    </p>
+                </fieldset>
+            </form>
+            <form name="update_patient" action="{{url_for('update_patient')}}" method="post" novalidate="">
+                <fieldset class="form-group">
+                    <legend>{{title}}</legend> 
+                    {{ form.hidden_tag() }}
+                    <p>
+                        {{ form.patientSSNID.label }}<br>
+                        {{ form.patientSSNID(size=35) }}
+                    </p>
+                    <p>
+                        {{ form.patientName.label }}<br>
+                        {{ form.patientName(size=35) }}
+                    </p>
+                    <p>
+                        {{ form.patientAge.label }}<br>
+                        {{ form.patientAge(size=35) }}
+                    </p>
+                    <p>
+                        {{ form.doa.label }}<br>
+                        {{ form.doa(size=35) }}
+                    </p>
+                    <p>
+                        {{ form.tob.label }}<br>
+                        {{ form.tob(size=35) }}
+                    </p>
+                    <p>
+                        {{ form.address.label }}<br>
+                        {{ form.address(size=35) }}
+                    </p>
+                    <p>
+                        {{ form.state.label }}<br>
+                        {{ form.state(size=35) }}
+                    </p>
+                    <p>
+                        {{ form.city.label }}<br>
+                        {{ form.city(size=35) }}
+                    </p>
+
+                    <p>
+                        {{ form.submit() }}
+                    </p>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+{% endblock %}

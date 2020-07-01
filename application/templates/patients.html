@@ -1,0 +1,39 @@
+{% extends "home.html" %}
+
+{% block forms %}
+
+    <h2 class="text-center">ALL Patients</h2>
+
+     <div>
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th scope="col">Patient ID</th>
+                <th scope="col">Patient Name</th>
+                <th scope="col">Patient Age</th>
+                <th scope="col">DOA</th>
+                <th scope="col">TOB</th>
+                <th scope="col">Address</th>
+            </tr>
+            </thead>
+            <tbody>
+
+            <!-- Construct the rest of courses here -->
+            {% for d in data %}
+            <tr>
+                <td scope='row'>{{ d["patientId"] }}</td>
+                <td>{{ d["patientName"] }}</td>
+                <td>{{ d["patientAge"] }}</td>
+                <td>{{ d["doa"] }}</td>
+                <td>{{ d["tob"] }}</td>
+                <td>{{ d["address"] }}</td>
+
+
+            </tr>
+            {% endfor %}
+            
+            </tbody>
+        </table>
+    </div>
+
+{% endblock %}

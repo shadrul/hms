@@ -12,10 +12,12 @@
     {% endfor %} 
     {% endif %} 
     {% endwith %}
-    <a href="{{url_for('patient_registration')}}">Patient Registration</a>
+    <a style="float: left; display: inline-block; margin-right: 15px;" href="{{url_for('patient_registration')}}">Patient Registration</a>
+    <a style="float: left; display: inline-block;margin-right: 15px;" href="{{url_for('update_patient')}}">Update Patient</a>
+    <a style="float: left; display: inline-block;margin-right: 15px;" href="{{url_for('home')}}">Home</a>
             {% block forms %}
             {% endblock %}
-    <p>{{access}}</p>
+    <!-- <p>{{access}}</p> -->
 
     
     {% endblock %}
