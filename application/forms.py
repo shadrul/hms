@@ -10,6 +10,7 @@ class LoginForm(FlaskForm):
 class UpdateForm(FlaskForm):
     # patientID   = IntegerField("patientID", validators=[DataRequired()])
     # go = SubmitField("Go")
+    patientID = StringField("patientID", validators=[DataRequired()])
     patientSSNID = StringField("patientSSNID", validators=[DataRequired()])
     patientName = StringField("patientName")
     patientAge = StringField("patientAge")
@@ -19,6 +20,7 @@ class UpdateForm(FlaskForm):
     state = StringField("state")
     city = StringField("city")
     submit = SubmitField("submit")
+    delete = SubmitField("delete")
 
 class getData(FlaskForm):
     patientID   = IntegerField("patientID", validators=[DataRequired()])

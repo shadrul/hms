@@ -1,0 +1,74 @@
+{% extends "home.html" %}
+
+{% block forms %}
+
+	<h2 class="text-center">Delete Patient</h2>
+	<div class="row">
+        <div class="col-md-6 offset-md-3">
+            <h3></h3>
+            <form name="get_patient" action="" method="post" novalidate>
+                <fieldset class="form-group">
+                    <legend>{{title}}</legend> 
+                    {{ form.hidden_tag() }}
+
+                    <p>
+                        {{ formx.patientID.label }}<br>
+                        {{ formx.patientID(size=35) }}
+                        {% for error in formx.patientID.errors %}
+                            <span class="error-message">{{ error }}</span>
+                        {% endfor %}
+                    </p>
+                    <p>
+                        {{ formx.go() }}
+                    </p>
+                </fieldset>
+            </form>
+            <form name="update_patient" action="" method="post" novalidate>
+                <fieldset class="form-group">
+                    <legend>{{title}}</legend> 
+                    {{ form.hidden_tag() }}
+                    <p>
+                        {{ form.patientID.label }}<br>
+                        {{ form.patientID(readonly = True) }}
+                    </p>
+                    <p>
+                        {{ form.patientSSNID.label }}<br>
+                        {{ form.patientSSNID(disabled = True) }}
+                    </p>
+                    <p>
+                        {{ form.patientName.label }}<br>
+                        {{ form.patientName(disabled = True) }}
+                    </p>
+                    <p>
+                        {{ form.patientAge.label }}<br>
+                        {{ form.patientAge(disabled = True) }}
+                    </p>
+                    <p>
+                        {{ form.doa.label }}<br>
+                        {{ form.doa(disabled = True) }}
+                    </p>
+                    <p>
+                        {{ form.tob.label }}<br>
+                        {{ form.tob(disabled = True) }}
+                    </p>
+                    <p>
+                        {{ form.address.label }}<br>
+                        {{ form.address(disabled = True) }}
+                    </p>
+                    <p>
+                        {{ form.state.label }}<br>
+                        {{ form.state(disabled = True) }}
+                    </p>
+                    <p>
+                        {{ form.city.label }}<br>
+                        {{ form.city(disabled = True) }}
+                    </p>
+
+                    <p>
+                        {{ form.delete() }}
+                    </p>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+{% endblock %}

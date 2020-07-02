@@ -122,7 +122,6 @@ def update_patient():
 
 	else:
 		if request.method =='GET':
-			print("hi")
 			patientId = request.args.get('patientID')
 			session['pid'] = patientId
 			print(patientId)
@@ -176,6 +175,10 @@ def update_patient():
 
 	return render_template('update_patient.html',form=form,formx=formx)
 
+
+
+# view all patients
+
 @app.route('/patients',methods=['GET','POST'])
 def patients():
 	if not session.get('token'):
@@ -191,4 +194,71 @@ def patients():
 			return redirect(url_for('login'))
 		elif(response.status_code==200):
 			return render_template('patients.html',data = data['patients'])
+
+
+
+
+# delete a patient
+@app.route('/delete_patient',methods=['GET','POST'])
+def delete_patient():
+	form = UpdateForm()
+	formx = getData()
+	if not session.get('token'):
+		return redirect(url_for('login'))
+	else:
+		if formx.go.data and formx.validate():
+			print("hji")
+			patientId = formx.patientID.data
+			session['pid'] = patientId
+			print(patientId)
+			token = session.get('token')
+			url ="https://abchospitalmanagement.herokuapp.com/patient"
+			data= {"patientId":patientId}
+			response = requests.get(url, json=data,headers={"Content-Type": "application/json", "Authorization": "JWT " + token})
+			print(response.json())
+			r = response.json()
+			if(response.status_code==200):
+				formx.patientID.data = r['patientId']
+				form.patientID.data = r['patientId']
+				form.patientSSNID.data = r['patientSSNId']
+				form.patientName.data = r['patientName']
+				form.patientAge.data = r['patientAge']
+				form.doa.data = r['doa']
+				form.tob.data = r['tob']
+				form.address.data = r['address']
+				form.state.data = r['state']
+				form.city.data = r['city']
+			elif(response.status_code==500):
+				session.pop('token',None)
+				return redirect(url_for('login'))
+		elif form.delete.data:
+			print("hiii")
+			patientID = form.patientID.data
+			print(patientID)
+			# patientSSNID = form.patientSSNID.data
+			# patientName = form.patientName.data
+			# patientAge = form.patientAge.data
+			# doa = form.doa.data
+			# tob = form.tob.data
+			# address = form.address.data
+			# state =	form.state.data
+			# city = form.city.data
+			token = session.get('token')
+			url = "https://abchospitalmanagement.herokuapp.com/patient"
+			data= {"patientId":patientID}
+			# data= {"patientId":patientID, "patientSSNId": patientSSNID, "patientName": patientName, "patientAge":patientAge, "doa":doa, "tob":tob, "address":address, "state":state, "city":city}
+			response = requests.delete(url, json=data,headers={"Content-Type": "application/json", "Authorization": "JWT " + token})
+			# formx.patientID.data = session.get('pid')
+			print(response)
+			if response.status_code == 200:
+				print(response.json())
+				flash("data deleted suucessfully", "success")
+				return redirect(url_for('delete_patient'))
+			elif(response.status_code==500):
+				session.pop('token',None)
+				return redirect(url_for('login'))
+	return render_template('delete_patient.html',form=form,formx=formx)
+
+
+
 
