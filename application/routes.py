@@ -144,7 +144,8 @@ def update_patient():
 			elif(response.status_code==500):
 				session.pop('token',None)
 				return redirect(url_for('login'))
-		if form.validate_on_submit():
+		if request.method=='POST' and form.submit.data:
+			print("hii")
 			patientID = session.get('pid')
 			patientSSNID = form.patientSSNID.data
 			patientName = form.patientName.data
@@ -162,6 +163,7 @@ def update_patient():
 			if response.status_code == 200:
 				print(response.json())
 				flash("data updated suucessfully", "success")
+				
 			elif(response.status_code==500):
 				session.pop('token',None)
 				return redirect(url_for('login'))
@@ -258,6 +260,42 @@ def delete_patient():
 				session.pop('token',None)
 				return redirect(url_for('login'))
 	return render_template('delete_patient.html',form=form,formx=formx)
+
+
+# search a patient
+@app.route('/search_patient',methods=['GET','POST'])
+def search_patient():
+	form = UpdateForm()
+	formx = getData()
+	if not session.get('token'):
+		return redirect(url_for('login'))
+	else:
+		if formx.go.data and formx.validate():
+			print("hji")
+			patientId = formx.patientID.data
+			session['pid'] = patientId
+			print(patientId)
+			token = session.get('token')
+			url ="https://abchospitalmanagement.herokuapp.com/patient"
+			data= {"patientId":patientId}
+			response = requests.get(url, json=data,headers={"Content-Type": "application/json", "Authorization": "JWT " + token})
+			print(response.json())
+			r = response.json()
+			if(response.status_code==200):
+				formx.patientID.data = r['patientId']
+				form.patientID.data = r['patientId']
+				form.patientSSNID.data = r['patientSSNId']
+				form.patientName.data = r['patientName']
+				form.patientAge.data = r['patientAge']
+				form.doa.data = r['doa']
+				form.tob.data = r['tob']
+				form.address.data = r['address']
+				form.state.data = r['state']
+				form.city.data = r['city']
+			elif(response.status_code==500):
+				session.pop('token',None)
+				return redirect(url_for('login'))
+	return render_template('search_patient.html',form=form,formx=formx)
 
 
 

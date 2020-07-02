@@ -12,10 +12,15 @@
     {% endfor %} 
     {% endif %} 
     {% endwith %}
-    <a style="float: left; display: inline-block; margin-right: 15px;" href="{{url_for('patient_registration')}}">Patient Registration</a>
-    <a style="float: left; display: inline-block;margin-right: 15px;" href="{{url_for('update_patient')}}">Update Patient</a>
-    <a style="float: left; display: inline-block;margin-right: 15px;" href="{{url_for('home')}}">Home</a>
-    <a style="float: left; display: inline-block;margin-right: 15px;" href="{{url_for('delete_patient')}}">Delete Patient</a>
+    <div>
+        <a style="float: left; display: inline-block; margin-right: 15px;" href="{{url_for('patient_registration')}}">Patient Registration</a>
+        <a style="float: left; display: inline-block;margin-right: 15px;" href="{{url_for('update_patient')}}">Update Patient</a>
+        <a style="float: left; display: inline-block;margin-right: 15px;" href="{{url_for('home')}}">Home</a>
+        <a style="float: left; display: inline-block;margin-right: 15px;" href="{{url_for('delete_patient')}}">Delete Patient</a>
+        <a style="float: left; display: inline-block;margin-right: 15px;" href="{{url_for('search_patient')}}">Search Patient</a>
+
+    </div>
+    <br clear="both">
             {% block forms %}
             {% endblock %}
     <!-- <p>{{access}}</p> -->

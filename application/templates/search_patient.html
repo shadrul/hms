@@ -2,15 +2,14 @@
 
 {% block forms %}
 
-	<h2 class="text-center">Update Patient</h2>
-    <p>{{data}}</p>
+	<h2 class="text-center">Search Patient</h2>
 	<div class="row">
         <div class="col-md-6 offset-md-3">
             <h3></h3>
-            <form name="get_patient" action="" method="get">
+            <form name="get_patient" action="" method="post" novalidate>
                 <fieldset class="form-group">
                     <legend>{{title}}</legend> 
-                    <!-- {{ form.hidden_tag() }} -->
+                    {{ form.hidden_tag() }}
 
                     <p>
                         {{ formx.patientID.label }}<br>
@@ -24,46 +23,47 @@
                     </p>
                 </fieldset>
             </form>
-            <form name="update_patient" action="{{url_for('update_patient')}}" method="post" novalidate>
+            <form name="update_patient" action="" method="post" novalidate>
                 <fieldset class="form-group">
                     <legend>{{title}}</legend> 
                     {{ form.hidden_tag() }}
                     <p>
+                        {{ form.patientID.label }}<br>
+                        {{ form.patientID(readonly = True) }}
+                    </p>
+                    <p>
                         {{ form.patientSSNID.label }}<br>
-                        {{ form.patientSSNID(size=35) }}
+                        {{ form.patientSSNID(readonly = True) }}
                     </p>
                     <p>
                         {{ form.patientName.label }}<br>
-                        {{ form.patientName(size=35) }}
+                        {{ form.patientName(readonly = True) }}
                     </p>
                     <p>
                         {{ form.patientAge.label }}<br>
-                        {{ form.patientAge(size=35) }}
+                        {{ form.patientAge(readonly = True) }}
                     </p>
                     <p>
                         {{ form.doa.label }}<br>
-                        {{ form.doa(size=35) }}
+                        {{ form.doa(readonly = True) }}
                     </p>
                     <p>
                         {{ form.tob.label }}<br>
-                        {{ form.tob(size=35) }}
+                        {{ form.tob(readonly = True) }}
                     </p>
                     <p>
                         {{ form.address.label }}<br>
-                        {{ form.address(size=35) }}
+                        {{ form.address(readonly = True) }}
                     </p>
                     <p>
                         {{ form.state.label }}<br>
-                        {{ form.state(size=35) }}
+                        {{ form.state(readonly = True) }}
                     </p>
                     <p>
                         {{ form.city.label }}<br>
-                        {{ form.city(size=35) }}
+                        {{ form.city(readonly = True) }}
                     </p>
 
-                    <p>
-                        {{ form.submit() }}
-                    </p>
                 </fieldset>
             </form>
         </div>
