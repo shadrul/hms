@@ -1,0 +1,80 @@
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
+    <script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.js"></script>
+</head>
+{% extends "home.html" %}
+
+{% block forms %}
+        <form name="login" action="" method="post" novalidate>
+                <fieldset class="form-group">
+                    <legend>{{title}}</legend> 
+                    {{ form.hidden_tag() }}
+
+                    {{ form.autocomp.label }}: {{ form.autocomp }}
+                    <br>
+                    {{form.add}}
+                </fieldset>
+        </form>
+        {% if added %}
+            <div>
+                <h2 class="text-center">Medicines Issued</h2>
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th scope="col">Test</th>
+                        <th scope="col">Amount</th>
+                       
+                    </tr>
+                    </thead>
+                   
+                    <tbody>
+
+                    <!-- Construct the rest of courses here -->
+                    
+                    {% for add in added%}
+                    <tr>
+                        <td scope='row'>{{ add["testName"] }}</td>
+                        <td>{{ add["amount"] }}</td>
+                    </tr>
+                    {% endfor %}
+
+                    
+                    </tbody>
+                </table>
+            </div>
+
+            <form name="login" action="" method="post" novalidate>
+                <fieldset class="form-group">
+                     {{ form.hidden_tag() }}
+                    {{ formi.update }}
+                </fieldset>
+            </form>
+
+
+        {% endif%}
+        
+
+
+
+
+
+
+
+<script>
+
+    $(function() {  
+
+        // for(var i=0;i<x.length;i++)
+        // {
+        //     meds.push(x[i]'{{["medicineName"]}}' );
+        // }
+        // console.log(meds);
+        // $('#medicine_autocomplete').autocomplete({
+        //     source : meds
+        // });
+     
+        });
+</script>
+{% endblock %}

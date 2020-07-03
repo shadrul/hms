@@ -395,5 +395,95 @@ def issue_medicine():
 	return render_template('issue_medicine.html', form = form, formi = formi, medicines = meds)
 
 
+# diagonistics
+@app.route('/diagonistics',methods=['GET','POST'])
+def diagonistics():
+	diagonistics_added =[]
+	formx = getData()
+	if not session.get('token'):
+		return redirect(url_for('login'))
+	else:
+		if formx.go.data and formx.validate():
+			print("hi")
+			patientId = formx.patientID.data
+			# session['pid'] = patientId
+			print(patientId)
+			token = session.get('token')
+			url ="https://abchospitalmanagement.herokuapp.com/patient"
+			data= {"patientId":patientId}
+			response = requests.get(url, json=data,headers={"Content-Type": "application/json", "Authorization": "JWT " + token})
+			print(response.json())
+			if(response.status_code==200):
+
+				data = response.json()
+				url1 ="https://abchospitalmanagement.herokuapp.com/diagnosticissued"
+				print(patientId)
+				d= {"patientId":patientId}
+				response1 = requests.get(url1, json=d,headers={"Content-Type": "application/json", "Authorization": "JWT " + token})
+				if(response1.status_code==200):
+					print("hello")
+					diag = response1.json()
+					print(diag)
+					return render_template('diagonistics.html', formx=formx, data = data, diag = diag['diagnostics'])
+			elif(response.status_code==500):
+				session.pop('token',None)
+				return redirect(url_for('login'))
+	return render_template('diagonistics.html',formx=formx)
 
 
+
+# issue diagonistics
+
+@app.route('/diagonistics/add_diagonistics',methods=['GET','POST'])
+def add_diagonistics():
+	formx = getData(request.values)
+	form = SearchForm()
+	formi = IssueForm()
+	if not session.get('token'):
+		return redirect(url_for('login'))
+	else:
+		token = session.get('token')
+		url ="https://abchospitalmanagement.herokuapp.com/diagnostics"
+		response = requests.get(url,headers={"Content-Type": "application/json", "Authorization": "JWT " + token})
+		diagonistics = response.json()
+		diags = diagonistics['diagnostics']
+		
+		if request.method=='POST' and formx.issue.data:
+			print("hiiiiiii	")
+			print(diagonistics)
+			patientId = formx.fld1.data
+			session['patientId']=patientId
+			print(patientId)
+		elif request.method=='POST' and form.add.data:
+			print(diags)
+			print(session.get('patientId'))
+			name = form.autocomp.data
+			for diag in diags:
+				if(diag['testName']==name):
+					print("aaaa")
+					# print(json.dump(med))
+					added.append({"testName": name, "amount": diag['rate'], "testId":  diag['testId']})
+					return render_template('add_diagonistics.html', form = form, formi = formi, diagonistics = diags, added= added)
+		elif request.method=='POST' and formi.update.data:
+			print('updatin')
+			# added available here
+			patientId = session.get('patientId')
+			token = session.get('token')
+			url ="https://abchospitalmanagement.herokuapp.com/diagnosticissued"
+			x= []
+			for i in added:
+				x.append({"patientId":patientId, "testId":i['testId']})
+			data= {"diagnostics" :x }
+			response = requests.post(url, json=data,headers={"Content-Type": "application/json", "Authorization": "JWT " + token})
+			print(response.json())
+			print(response)
+			if(response.status_code==200):
+				session.pop('patientId',None)
+				added.clear()
+				return redirect(url_for('diagonistics'))
+				
+			elif(response.status_code==500):
+				session.pop('token',None)
+				return redirect(url_for('login'))
+
+	return render_template('add_diagonistics.html', form = form, formi = formi, diagonistics = diags)
