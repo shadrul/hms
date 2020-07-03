@@ -1,7 +1,8 @@
 import requests
 from application import app
 from flask import render_template, request, redirect, session, url_for, flash
-from application.forms import LoginForm,UpdateForm, getData
+from application.forms import LoginForm,UpdateForm, getData, SearchForm, IssueForm
+import json
 
 
 @app.route('/',methods=['GET','POST'])
@@ -163,7 +164,7 @@ def update_patient():
 			if response.status_code == 200:
 				print(response.json())
 				flash("data updated suucessfully", "success")
-				
+
 			elif(response.status_code==500):
 				session.pop('token',None)
 				return redirect(url_for('login'))
@@ -296,6 +297,102 @@ def search_patient():
 				session.pop('token',None)
 				return redirect(url_for('login'))
 	return render_template('search_patient.html',form=form,formx=formx)
+
+
+added = []
+
+# pharmacy
+@app.route('/pharmacy',methods=['GET','POST'])
+def pharmacy():
+	added =[]
+	formx = getData()
+	if not session.get('token'):
+		return redirect(url_for('login'))
+	else:
+		if formx.go.data and formx.validate():
+			print("hji")
+			patientId = formx.patientID.data
+			# session['pid'] = patientId
+			print(patientId)
+			token = session.get('token')
+			url ="https://abchospitalmanagement.herokuapp.com/patient"
+			data= {"patientId":patientId}
+			response = requests.get(url, json=data,headers={"Content-Type": "application/json", "Authorization": "JWT " + token})
+			print(response.json())
+			if(response.status_code==200):
+				data = response.json()
+				url1 ="https://abchospitalmanagement.herokuapp.com/medicineissued"
+				d= {"patientId":patientId}
+				response1 = requests.get(url1, json=d,headers={"Content-Type": "application/json", "Authorization": "JWT " + token})
+				if(response1.status_code==200):
+					med = response1.json()
+					print(med)
+					return render_template('pharmacy.html', formx=formx, data = data, med = med['medicines'])
+			elif(response.status_code==500):
+				session.pop('token',None)
+				return redirect(url_for('login'))
+	return render_template('pharmacy.html',formx=formx)
+
+
+# issue medicines
+
+@app.route('/pharmacy/issue_medicine',methods=['GET','POST'])
+def issue_medicine():
+	formx = getData(request.values)
+	form = SearchForm()
+	formi = IssueForm()
+	if not session.get('token'):
+		return redirect(url_for('login'))
+	else:
+		token = session.get('token')
+		url ="https://abchospitalmanagement.herokuapp.com/medicines"
+		response = requests.get(url,headers={"Content-Type": "application/json", "Authorization": "JWT " + token})
+		medicines = response.json()
+		meds = medicines['medicines']
+		
+		if request.method=='POST' and formx.issue.data:
+			print("hiiiiiii	")
+			print(medicines)
+			patientId = formx.fld1.data
+			session['patientId']=patientId
+			print(patientId)
+		elif request.method=='POST' and form.add.data:
+			print(meds)
+			print(session.get('patientId'))
+			name = form.autocomp.data
+			quantity = form.quantity.data
+			for med in meds:
+				if(med['medicineName']==name):
+					if(med['quantity']>=quantity):
+						print("aaaa")
+						# print(json.dump(med))
+						amount = quantity * med['rate']
+						added.append({"medicineName": name, "quantity": quantity, "rate": med['rate'], "amount":amount, "medicineId":  med['medicineId']}
+							)
+						return render_template('issue_medicine.html', form = form, formi = formi, medicines = meds, added= added)
+		elif request.method=='POST' and formi.update.data:
+			print('updatin')
+			# added available here
+			patientId = session.get('patientId')
+			token = session.get('token')
+			url ="https://abchospitalmanagement.herokuapp.com/medicineissued"
+			x= []
+			for i in added:
+				x.append({"patientId":patientId, "medicineId":i['medicineId'], "quantity":i['quantity']})
+			data= {"medicines" :x }
+			response = requests.post(url, json=data,headers={"Content-Type": "application/json", "Authorization": "JWT " + token})
+			print(response.json())
+			print(response)
+			if(response.status_code==200):
+				session.pop('patientId',None)
+				added.clear()
+				return redirect(url_for('pharmacy'))
+				
+			elif(response.status_code==500):
+				session.pop('token',None)
+				return redirect(url_for('login'))
+
+	return render_template('issue_medicine.html', form = form, formi = formi, medicines = meds)
 
 
 

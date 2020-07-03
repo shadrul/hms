@@ -1,37 +1,37 @@
     <!-- load layout on every page -->
     {% extends "layout.html" %}
+    {% import "bootstrap/wtf.html" as wtf %}
 
    
    <!-- this loads block inside layout -->
     {% block content %}
-    <h1>Login</h1>
+
 
     <div class="row">
-        <div class="col-md-6 offset-md-3">
-            <h3></h3>
+        <div class="col-md-6 offset-md-3 box">
+            <h2 class="text-center">Login</h2>
             <form name="login" action="" method="post" novalidate>
                 <fieldset class="form-group">
                     <legend>{{title}}</legend> 
                     {{ form.hidden_tag() }}
 
                     <p>
-                        {{ form.username.label }}<br>
-                        {{ form.username(size=35) }}
+                        
+                        {{ wtf.form_field(form.username, placeholder="username") }}
                         {% for error in form.username.errors %}
                             <span class="error-message">{{ error }}</span>
                         {% endfor %}
                     </p>
                     <p>
-                        {{ form.password.label }}<br>
-                        {{ form.password(size=15) }}
+                        
+                        {{ wtf.form_field(form.password, placeholder="password") }}
                         {% for error in form.password.errors %}
                             <span class="error-message">{{ error }}</span>
                         {% endfor %}
                     </p>
 
-                    <p>
-                        {{ form.submit() }}
-                    </p>
+                    <br class="clear">
+                    <input class="btn-submit btn btn-primary" type="submit" name="submit" value="Login">
                 </fieldset>
 
 
