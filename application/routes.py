@@ -487,3 +487,44 @@ def add_diagonistics():
 				return redirect(url_for('login'))
 
 	return render_template('add_diagonistics.html', form = form, formi = formi, diagonistics = diags)
+
+
+# diagonistics
+@app.route('/billing',methods=['GET','POST'])
+def billing():
+	formx = getData()
+	if not session.get('token'):
+		return redirect(url_for('login'))
+	else:
+		if formx.go.data and formx.validate():
+			print("hi")
+			patientId = formx.patientID.data
+			# session['pid'] = patientId
+			print(patientId)
+			token = session.get('token')
+			url ="https://abchospitalmanagement.herokuapp.com/patient"
+			data= {"patientId":patientId}
+			response = requests.get(url, json=data,headers={"Content-Type": "application/json", "Authorization": "JWT " + token})
+			print(response.json())
+			if(response.status_code==200):
+				data = response.json()
+				url1 ="https://abchospitalmanagement.herokuapp.com/diagnosticissued"
+				print(patientId)
+				d= {"patientId":patientId}
+				response1 = requests.get(url1, json=d,headers={"Content-Type": "application/json", "Authorization": "JWT " + token})
+				if(response1.status_code==200):
+					print("hello")
+					diag = response1.json()
+					print(diag)
+					url2 ="https://abchospitalmanagement.herokuapp.com/medicineissued"
+					pid= {"patientId":patientId}
+					response2 = requests.get(url2, json=pid,headers={"Content-Type": "application/json", "Authorization": "JWT " + token})
+					if(response2.status_code==200):
+						med = response2.json()
+						print(med)
+						print("here")
+						return render_template('diagonistics.html', formx=formx, data = data, diag = diag['diagnostics'], med = med['medicines'])
+			elif(response.status_code==500):
+				session.pop('token',None)
+				return redirect(url_for('login'))
+	return render_template('diagonistics.html',formx=formx)

@@ -1,0 +1,121 @@
+{% extends "home.html" %}
+
+{% block forms %}
+
+	<h2 class="text-center">asndfkjksd</h2>
+	<div class="row">
+        <div class="col-md-6 offset-md-3">
+            <h3></h3>
+            <form name="get_patient" action="" method="post" novalidate>
+                <fieldset class="form-group">
+                    <legend>{{title}}</legend> 
+                    {{ formx.hidden_tag() }}
+
+                    <p>
+                        {{ formx.patientID.label }}<br>
+                        {{ formx.patientID(size=35) }}
+                        {% for error in formx.patientID.errors %}
+                            <span class="error-message">{{ error }}</span>
+                        {% endfor %}
+                    </p>
+                    <p>
+                        {{ formx.go() }}
+                    </p>
+                </fieldset>
+            </form>
+            {% if data  %}
+            <div>
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th scope="col">Patient ID</th>
+                        <th scope="col">Patient Name</th>
+                        <th scope="col">Patient Age</th>
+                        <th scope="col">DOA</th>
+                        <th scope="col">TOB</th>
+                        <th scope="col">Address</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    <!-- Construct the rest of courses here -->
+                    
+                    <tr>
+                        <td scope='row'>{{ data["patientId"] }}</td>
+                        <td>{{ data["patientName"] }}</td>
+                        <td>{{ data["patientAge"] }}</td>
+                        <td>{{ data["doa"] }}</td>
+                        <td>{{ data["tob"] }}</td>
+                        <td>{{ data["address"] }}</td>
+
+
+                    </tr>
+                    
+                    </tbody>
+                </table>
+            </div>
+            <div>
+                <h2 class="text-center">diagonistics Conducted</h2>
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th scope="col">Test</th>
+                        <th scope="col">Amount</th>
+                    </tr>
+                    </thead>
+                    {% if diag %}
+                    <tbody>
+
+                    <!-- Construct the rest of courses here -->
+                    
+                    {% for d in diag%}
+                    <tr>
+                        <td scope='row'>{{ d["testName"] }}</td>
+                        <td>{{ d["rate"] }}</td>d>
+                    </tr>
+                    {% endfor %}
+
+                    
+                    </tbody>
+                    {% else %}
+                    <p>NO diagonistics conducted Tilll now</p>
+                    {% endif %}
+                </table>
+            </div>
+            <div>
+                <h2 class="text-center">Medicines Issued</h2>
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th scope="col">Medicine</th>
+                        <th scope="col">Quantity</th>
+                        <th scope="col">Rate</th>
+                        <th scope="col">Amount</th>
+                       
+                    </tr>
+                    </thead>
+                    {% if med %}
+                    <tbody>
+
+                    <!-- Construct the rest of courses here -->
+                    
+                    {% for m in med%}
+                    <tr>
+                        <td scope='row'>{{ m["medicineName"] }}</td>
+                        <td>{{ m["quantity"] }}</td>
+                        <td>{{ m["rate"] }}</td>
+                        <td>{{ m["amount"] }}</td>
+                    </tr>
+                    {% endfor %}
+
+                    
+                    </tbody>
+                    {% else %}
+                    <p>NO medicines issued Tilll now</p>
+                    {% endif %}
+                </table>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
