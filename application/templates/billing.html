@@ -2,7 +2,7 @@
 
 {% block forms %}
 
-	<h2 class="text-center">asndfkjksd</h2>
+	<h2 class="text-center">Billing</h2>
 	<div class="row">
         <div class="col-md-6 offset-md-3">
             <h3></h3>
@@ -23,6 +23,8 @@
                     </p>
                 </fieldset>
             </form>
+        </div>
+    </div>
             {% if data  %}
             <div>
                 <table class="table table-hover">
@@ -54,6 +56,18 @@
                     </tbody>
                 </table>
             </div>
+            <div style="text-align: center; ">
+                <strong style="margin-right: 35px;">No. of days = {{ days }}</strong>
+                {% if data['tob'] == 'General Ward' %}
+                    {% set charge = 2000%}
+                {% elif data['tob'] == 'Semi Sharing'%}
+                    {% set charge = 4000%}
+                {% else %}
+                    {% set charge = 8000 %}
+                {% endif %}
+                <strong>Patient Total = {{ days * charge }}</strong>
+
+            </div>
             <div>
                 <h2 class="text-center">diagonistics Conducted</h2>
                 <table class="table table-hover">
@@ -66,12 +80,12 @@
                     {% if diag %}
                     <tbody>
 
-                    <!-- Construct the rest of courses here -->
                     
                     {% for d in diag%}
                     <tr>
                         <td scope='row'>{{ d["testName"] }}</td>
                         <td>{{ d["rate"] }}</td>d>
+
                     </tr>
                     {% endfor %}
 
@@ -81,6 +95,9 @@
                     <p>NO diagonistics conducted Tilll now</p>
                     {% endif %}
                 </table>
+                <div class="text-center" >
+                <strong >Diagonistics Total = {{ diag_total }}</strong>
+                </div>
             </div>
             <div>
                 <h2 class="text-center">Medicines Issued</h2>
@@ -115,7 +132,11 @@
                     {% endif %}
                 </table>
             </div>
-            {% endif %}
-        </div>
-    </div>
+             <div class="text-center" >
+                <strong >Medicines Total = {{ medicine_total }}</strong>
+            </div>
+            <div class="text-center" style="margin-top: 25px;">
+                <h2>Grand Total = {{ medicine_total + diag_total + (days * charge) }}</h2>
+            </div>
+            {% endif %}    
 {% endblock %}

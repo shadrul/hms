@@ -3,6 +3,8 @@ from application import app
 from flask import render_template, request, redirect, session, url_for, flash
 from application.forms import LoginForm,UpdateForm, getData, SearchForm, IssueForm
 import json
+from datetime import date 
+from datetime import datetime
 
 
 @app.route('/',methods=['GET','POST'])
@@ -523,8 +525,20 @@ def billing():
 						med = response2.json()
 						print(med)
 						print("here")
-						return render_template('diagonistics.html', formx=formx, data = data, diag = diag['diagnostics'], med = med['medicines'])
+						today = datetime.today()
+						days = (today - datetime.strptime(data['doa'], '%Y-%m-%d')).days
+						print(days)
+						# calculate total diag amount
+						diag_total = 0
+						for d in diag['diagnostics']:
+							diag_total+=d['rate']
+
+						# cal medicine_total amount
+						medicine_total = 0
+						for m in med['medicines']:
+							medicine_total+=m['amount']
+						return render_template('billing.html', formx=formx, data = data, diag = diag['diagnostics'], med = med['medicines'],days = days, diag_total = diag_total, medicine_total=medicine_total)
 			elif(response.status_code==500):
 				session.pop('token',None)
 				return redirect(url_for('login'))
-	return render_template('diagonistics.html',formx=formx)
+	return render_template('billing.html',formx=formx)
